@@ -1,0 +1,16 @@
+.user-activity-dashboard {
+    padding: 20px;
+  }
+  
+  .metrics-container {
+    display: flex;
+    justify-content: space-around;
+    margin-bottom: 20px;
+  }
+  
+  .bookings-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 20px;
+  }
+  

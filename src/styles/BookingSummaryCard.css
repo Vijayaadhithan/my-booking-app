@@ -1,0 +1,16 @@
+.booking-summary-card {
+    background-color: #f9f9f9;
+    padding: 15px;
+    border-radius: 5px;
+    border: 1px solid #ddd;
+  }
+  
+  .booking-summary-card h3 {
+    font-size: 18px;
+    margin-bottom: 10px;
+  }
+  
+  .booking-summary-card p {
+    margin: 5px 0;
+  }
+  
