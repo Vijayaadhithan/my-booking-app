@@ -15,7 +15,7 @@ const ServiceListingPage = () => {
   const fetchServices = async (page = 1) => {
     setLoading(true);
     try {
-      const response = await axios.get(`/api/services/?page=${page}&search=${search}`);
+      const response = await axios.get(`/services/?page=<span class="math-inline">\{page\}&search\=</span>{search}`);
       setServices(response.data.results);
       setTotalPages(response.data.total_pages);
     } catch (error) {
@@ -26,34 +26,56 @@ const ServiceListingPage = () => {
   };
 
   useEffect(() => {
-    fetchServices(currentPage);
-  }, [currentPage, search]);
+    const fetchServices = async () => {
+        setLoading(true);
+        try {
+            const response = await axios.get(`/services/?page=${page}&search=${search}`);
+            setServices(response.data.results);
+            setTotalPages(response.data.total_pages);
+        } catch (error) {
+            console.error("Error fetching services:", error);
+            // Add error handling, e.g., show an error message to the user
+        } finally {
+            setLoading(false);
+        }
+    };
 
-  return (
-    <div className="service-listing-container">
-      <h2>Available Services</h2>
-      <div className="search-bar">
-        <input
-          type="text"
-          placeholder="Search for services..."
-          value={search}
-          onChange={(e) => setSearch(e.target.value)}
-        />
-        <button onClick={() => fetchServices(1)}>Search</button>
+    fetchServices();
+}, [page, search]);  // Include search in the dependency array
+
+const handleSearchChange = (event) => {
+    setSearch(event.target.value);
+    setPage(1);  // Reset page to 1 when search query changes
+};
+
+return (
+  <div>
+      <h1>Service Listing</h1>
+      <div className="mb-3">
+          <input
+              type="text"
+              className="form-control"
+              placeholder="Search services..."
+              value={search}
+              onChange={handleSearchChange}
+          />
       </div>
-      {loading && <Loader />}
-      <div className="service-grid">
-        {services.map((service) => (
-          <ServiceCard key={service.id} service={service} />
-        ))}
-      </div>
-      <Pagination
-        currentPage={currentPage}
-        totalPages={totalPages}
-        onPageChange={(page) => setCurrentPage(page)}
-      />
-    </div>
-  );
+      {loading ? (
+          <Loader />
+      ) : (
+          <>
+              <div className="row">
+                  {services.map((service) => (
+                      <div key={service.id} className="col-md-4 mb-4">
+                          <ServiceCard service={service} />
+                      </div>
+                  ))}
+              </div>
+              <Pagination page={page} totalPages={totalPages} setPage={setPage} />
+          </>
+      )}
+  </div>
+);
 };
 
 export default ServiceListingPage;

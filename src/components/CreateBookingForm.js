@@ -9,7 +9,7 @@ const CreateBookingForm = ({ onCreateBooking, onClose }) => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await axios.post("/api/bookings/", {
+      const response = await axios.post("/bookings/", {
         service: serviceId,
         date,
       });

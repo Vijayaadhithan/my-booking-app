@@ -10,7 +10,7 @@ const AddServiceForm = ({ onAddService }) => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await axios.post("/api/provider/services/", {
+      const response = await axios.post("/services/", {
         name,
         price,
         description,

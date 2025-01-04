@@ -17,9 +17,9 @@ const ProviderDashboard = () => {
   const fetchDashboardData = async () => {
     setLoading(true);
     try {
-      const servicesResponse = await axios.get("/api/provider/services/");
-      const bookingsResponse = await axios.get("/api/provider/bookings/");
-      const metricsResponse = await axios.get("/api/provider/metrics/");
+      const servicesResponse = await axios.get("/services/");
+      const bookingsResponse = await axios.get("/bookings/");
+      const metricsResponse = await axios.get("/metrics/");
       setServices(servicesResponse.data);
       setBookings(bookingsResponse.data);
       setMetrics(metricsResponse.data);

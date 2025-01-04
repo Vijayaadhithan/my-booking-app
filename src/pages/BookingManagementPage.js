@@ -12,11 +12,13 @@ const BookingManagementPage = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
   const [showCreateForm, setShowCreateForm] = useState(false);
+  const [search, setSearch] = useState("");  // Add search state
+  const [filterBy, setFilterBy] = useState("");  // Add filter state
 
   const fetchBookings = async (page = 1) => {
     setLoading(true);
     try {
-      const response = await axios.get(`/api/bookings/?page=${page}`);
+      const response = await axios.get(`/bookings/?page=${page}`);
       setBookings(response.data.results);
       setTotalPages(response.data.total_pages);
     } catch (error) {
@@ -40,41 +42,57 @@ const BookingManagementPage = () => {
   };
 
   useEffect(() => {
-    fetchBookings(currentPage);
-  }, [currentPage]);
+    const fetchBookings = async () => {
+        setLoading(true);
+        try {
+          const response = await axios.get(`/bookings/?page=${page}&search=${search}&filter=${filterBy}`);
+            setBookings(response.data.results);  // Access results from paginated response
+            setTotalPages(response.data.total_pages);  // Access total_pages from paginated response
+        } catch (error) {
+            console.error("Error fetching bookings:", error);
+            // Add error handling, e.g., show an error message to the user
+        } finally {
+            setLoading(false);
+        }
+    };
 
-  return (
-    <div className="booking-management-container">
-      <h2>Your Bookings</h2>
-      <button
-        className="create-booking-button"
-        onClick={() => setShowCreateForm(!showCreateForm)}
-      >
-        {showCreateForm ? "Close Form" : "Create Booking"}
-      </button>
-      {showCreateForm && (
-        <CreateBookingForm
-          onCreateBooking={handleCreateBooking}
-          onClose={() => setShowCreateForm(false)}
-        />
-      )}
-      {loading && <Loader />}
-      <div className="booking-grid">
-        {bookings.map((booking) => (
-          <BookingCard
-            key={booking.id}
-            booking={booking}
-            onCancel={handleCancelBooking}
+    fetchBookings();
+}, [page, search, filterBy]);
+
+const handleSearchChange = (event) => {
+  setSearch(event.target.value);
+  setPage(1);
+};
+
+const handleFilterChange = (event) => {
+  setFilterBy(event.target.value);
+  setPage(1);
+};
+
+return (
+  <div>
+      <h1>Booking Management</h1>
+      <div className="mb-3">
+          <input
+              type="text"
+              className="form-control"
+              placeholder="Search bookings..."
+              value={search}
+              onChange={handleSearchChange}
           />
-        ))}
       </div>
-      <Pagination
-        currentPage={currentPage}
-        totalPages={totalPages}
-        onPageChange={(page) => setCurrentPage(page)}
-      />
-    </div>
-  );
+      <div className="mb-3">
+          <select className="form-select" value={filterBy} onChange={handleFilterChange}>
+              <option value="">Filter by status</option>
+              <option value="pending">Pending</option>
+              <option value="confirmed">Confirmed</option>
+              <option value="completed">Completed</option>
+              <option value="cancelled">Cancelled</option>
+          </select>
+      </div>
+      {/* ... (rest of the component code) ... */}
+  </div>
+);
 };
 
 export default BookingManagementPage;

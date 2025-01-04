@@ -10,7 +10,7 @@ const EditServiceModal = ({ service, onClose, onEdit }) => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await axios.put(`/api/provider/services/${service.id}/`, {
+      const response = await axios.put(`/services/${service.id}/`, {
         name,
         price,
         description,

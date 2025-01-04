@@ -16,9 +16,9 @@ const UserActivityDashboard = () => {
   const fetchDashboardData = async () => {
     setLoading(true);
     try {
-      const bookingsResponse = await axios.get("/api/user/bookings/");
-      const favoritesResponse = await axios.get("/api/user/favorites/");
-      const metricsResponse = await axios.get("/api/user/metrics/");
+      const bookingsResponse = await axios.get("/bookings/");
+      const favoritesResponse = await axios.get("/favorites/");
+      const metricsResponse = await axios.get("/metrics/");
       setBookings(bookingsResponse.data);
       setFavorites(favoritesResponse.data);
       setMetrics(metricsResponse.data);
